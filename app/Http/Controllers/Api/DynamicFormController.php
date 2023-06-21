@@ -33,7 +33,7 @@ class DynamicFormController extends Controller
             $forms = DynamicForm::all();
 
             return DynamicFormResource::collection($forms);
-            
+
         } catch (Exception $exception) {
 
             return response()->json(['error' => $exception->getMessage()]);
@@ -53,7 +53,7 @@ class DynamicFormController extends Controller
 
             $return = $this->dynamicFormService->create($data);
 
-            return DynamicFormResource::collection($return);
+            return new DynamicFormResource($return);
 
         } catch (Exception $exception) {
 
