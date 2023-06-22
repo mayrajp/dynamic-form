@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DynamicFormRequest;
+use App\Http\Requests\DynamicFormUpdateRequest;
 use App\Http\Resources\DynamicFormResource;
 use App\Models\DynamicForm;
 use App\Models\Post;
@@ -26,7 +27,7 @@ class DynamicFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getAllForms()
     {
         try {
 
@@ -46,7 +47,7 @@ class DynamicFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DynamicFormRequest $request)
+    public function create(DynamicFormRequest $request)
     {
         try {
             $data = $request->validated();
@@ -89,15 +90,17 @@ class DynamicFormController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(DynamicFormRequest $request, int $id)
     {
         try {
 
             $data = $request->validated();
             
-            $oldDynamicForm = DynamicForm::findOrFail($id);
+            $dynamicForm = DynamicForm::findOrFail($id);
 
-            $this->dynamicFormService->update($oldDynamicForm, $data);
+            $this->dynamicFormService->update($dynamicForm, $data);
+
+            return new DynamicFormResource($dynamicForm);
 
         } catch (Exception $exception) {
 
@@ -114,6 +117,19 @@ class DynamicFormController extends Controller
      */
     public function destroy(int $id)
     {
-        //
+        try {
+
+            $dynamicForm = DynamicForm::findOrFail($id);
+
+            $dynamicForm->fields()->delete();
+
+            $dynamicForm->delete();
+
+            return response()->json(['message' => 'Successfully deleted.'], 200);
+
+        } catch (Exception $exception) {
+
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
 }

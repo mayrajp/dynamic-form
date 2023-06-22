@@ -29,7 +29,6 @@ class DynamicFormRequest extends FormRequest
             'name' => 'required|min:3|max:255',
             'description' => 'required|min:5|max:255',
             'created_by' => 'required',
-            'fields' => 'required',
         ];
     }
 
