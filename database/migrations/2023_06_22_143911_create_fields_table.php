@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('label');
             $table->string('type');
             $table->string('class');
-            $table->string('img_url');
             $table->boolean('is_required');
             $table->boolean('is_multiple');
             $table->json('options')->nullable();
+            $table->boolean('is_active');
             $table->foreignId('dynamic_form_id')->constrained('dynamic_forms');
             $table->timestamps();
         });

@@ -21,4 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/dynamic_forms/index', [DynamicFormController::class, 'index']);
 Route::post('/dynamic_forms/store', [DynamicFormController::class, 'store']);
+Route::get('/dynamic_forms/show/{id}', [DynamicFormController::class, 'show']);
+Route::put('/dynamic_forms/update/{id}', [DynamicFormController::class, 'update']);
+
+
 

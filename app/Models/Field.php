@@ -13,7 +13,7 @@ class Field extends Model
 
     protected $fillable = [
         'label', 'type', 'class', 'img_url',
-        'is_required', 'is_multiple', 'options'
+        'is_required', 'is_multiple', 'options', 'is_active'
     ];
 
     public function dynamicForm()

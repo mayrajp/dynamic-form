@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('fields', function (Blueprint $table) {
-            $table->string('img_url')->nullable()->change();
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->string('url_image');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('fields', function (Blueprint $table) {
-            $table->string('img_url')->change();
-        });
+        Schema::dropIfExists('images');
     }
 };

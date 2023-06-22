@@ -22,13 +22,18 @@ class DynamicFormService
                 'label' => $field['label'],
                 'type' => $field['type'],
                 'class' => $field['class'],
-                'img_url' => $field['img_url'],
                 'is_required' => $field['is_required'],
                 'is_multiple' => $field['is_multiple'],
                 'options' => json_encode($field['options']),
+                'is_active' => 1,
             ]);
         }
-        
+
         return $newDynamicForm;
     }
+
+    // public function update(DynamicForm $dynamicForm, array $data): DynamicForm
+    // {
+        
+    // }
 }

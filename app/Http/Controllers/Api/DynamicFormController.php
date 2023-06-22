@@ -69,19 +69,18 @@ class DynamicFormController extends Controller
      */
     public function show(int $id)
     {
-        //
+        try {
+
+            $dynamicForm = DynamicForm::findOrFail($id);
+
+            return new DynamicFormResource($dynamicForm);
+
+        } catch (Exception $exception) {
+
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(int $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -92,7 +91,19 @@ class DynamicFormController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        //
+        try {
+
+            $data = $request->validated();
+            
+            $oldDynamicForm = DynamicForm::findOrFail($id);
+
+            $this->dynamicFormService->update($oldDynamicForm, $data);
+
+        } catch (Exception $exception) {
+
+            return response()->json(['error' => $exception->getMessage()]);
+        }
+
     }
 
     /**
