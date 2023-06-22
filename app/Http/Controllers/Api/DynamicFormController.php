@@ -29,16 +29,10 @@ class DynamicFormController extends Controller
      */
     public function getAllForms()
     {
-        try {
 
-            $forms = DynamicForm::all();
+        $forms = DynamicForm::all();
 
-            return DynamicFormResource::collection($forms);
-
-        } catch (Exception $exception) {
-
-            return response()->json(['error' => $exception->getMessage()]);
-        }
+        return DynamicFormResource::collection($forms);
     }
 
     /**
@@ -55,7 +49,6 @@ class DynamicFormController extends Controller
             $return = $this->dynamicFormService->create($data);
 
             return new DynamicFormResource($return);
-
         } catch (Exception $exception) {
 
             return response()->json(['error' => $exception->getMessage()]);
@@ -70,16 +63,9 @@ class DynamicFormController extends Controller
      */
     public function show(int $id)
     {
-        try {
+        $dynamicForm = DynamicForm::findOrFail($id);
 
-            $dynamicForm = DynamicForm::findOrFail($id);
-
-            return new DynamicFormResource($dynamicForm);
-
-        } catch (Exception $exception) {
-
-            return response()->json(['error' => $exception->getMessage()]);
-        }
+        return new DynamicFormResource($dynamicForm);
     }
 
 
@@ -95,18 +81,16 @@ class DynamicFormController extends Controller
         try {
 
             $data = $request->validated();
-            
+
             $dynamicForm = DynamicForm::findOrFail($id);
 
             $this->dynamicFormService->update($dynamicForm, $data);
 
             return new DynamicFormResource($dynamicForm);
-
         } catch (Exception $exception) {
 
             return response()->json(['error' => $exception->getMessage()]);
         }
-
     }
 
     /**
@@ -125,8 +109,8 @@ class DynamicFormController extends Controller
 
             $dynamicForm->delete();
 
-            return response()->json(['message' => 'Successfully deleted.'], 200);
-
+            return response()->json(['message' => 'Successfully deleted'], 200);
+            
         } catch (Exception $exception) {
 
             return response()->json(['error' => $exception->getMessage()]);
