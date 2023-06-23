@@ -11,7 +11,7 @@ class DynamicForm extends Model
 
     protected $table = 'dynamic_forms';
 
-    protected $fillable = ['name', 'description','created_by'];
+    protected $fillable = ['name', 'description','created_by', 'is_active'];
 
     public function fields()
     {

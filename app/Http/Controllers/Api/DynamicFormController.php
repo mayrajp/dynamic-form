@@ -22,11 +22,7 @@ class DynamicFormController extends Controller
         $this->dynamicFormService = new DynamicFormService();
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function getAllForms()
     {
 
@@ -35,12 +31,7 @@ class DynamicFormController extends Controller
         return DynamicFormResource::collection($forms);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function create(DynamicFormRequest $request)
     {
         try {
@@ -55,12 +46,7 @@ class DynamicFormController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show(int $id)
     {
         $dynamicForm = DynamicForm::findOrFail($id);
@@ -69,13 +55,7 @@ class DynamicFormController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(DynamicFormRequest $request, int $id)
     {
         try {
@@ -93,21 +73,14 @@ class DynamicFormController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy(int $id)
     {
         try {
 
             $dynamicForm = DynamicForm::findOrFail($id);
 
-            $dynamicForm->fields()->delete();
-
-            $dynamicForm->delete();
+            $this->dynamicFormService->destroy($dynamicForm);
 
             return response()->json(['message' => 'Successfully deleted'], 200);
             

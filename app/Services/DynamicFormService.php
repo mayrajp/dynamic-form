@@ -13,6 +13,7 @@ class DynamicFormService
             'name' => $data['name'],
             'description' => $data['description'],
             'created_by' => $data['created_by'],
+            'is_active' => true,
         ]);
 
         return $newDynamicForm;
@@ -27,5 +28,21 @@ class DynamicFormService
         ]);
         
         return $dynamicForm;
+    }
+
+    public function destroy(DynamicForm $dynamicForm) : void
+    {
+        $fields = $dynamicForm->fields();
+
+        if($fields){
+
+            foreach($fields as $field){
+                $field->is_active = false;
+                $field->save();
+            }
+        }
+
+        $dynamicForm->is_active = false;
+        $dynamicForm->save();
     }
 }

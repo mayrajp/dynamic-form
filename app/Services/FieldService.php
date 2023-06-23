@@ -17,7 +17,7 @@ class FieldService
             'is_required' => $data['is_required'],
             'is_multiple' => $data['is_multiple'],
             'options' => json_encode($data['options']),
-            'is_active' => $data['is_active'],
+            'is_active' => true,
         ]);
 
         return $dynamicForm;
@@ -27,6 +27,7 @@ class FieldService
     {
         $is_modified = $this->fieldHasBeenModified($field, $data);
 
+        
         if ($is_modified) {
             $dynamicForm->fields()->create([
                 'label' => $data['label'],
@@ -41,6 +42,7 @@ class FieldService
             $field->is_active = false;
 
             $field->save();
+            
         } else {
 
             $field->update([
@@ -57,6 +59,7 @@ class FieldService
 
     private function fieldHasBeenModified(Field $field, array $data): bool
     {
+
         if ($field->label != $data['label']) {
             return true;
         }
