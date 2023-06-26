@@ -22,26 +22,26 @@ class CompletedFormService
             'expires_in' => date('Y-m-d', $time),
         ]);
 
-        foreach ($data['answers'] as $answare) {
+        foreach ($data['answers'] as $dataAnsware) {
 
-            $field = Field::find($answare['field_id']);
+            $field = Field::find($dataAnsware['field_id']);
 
             if ($field->type == 'file') {
-                $this->saveTypeFile($completedForm, $answare);
+                $this->saveTypeFile($completedForm, $dataAnsware);
             } else {
                 $completedForm->answers()->create([
-                    'field_id' => $answare['field_id'],
-                    'answare' => json_encode($answare['answare']),
+                    'field_id' => $dataAnsware['field_id'],
+                    'answare' => json_encode($dataAnsware['answare']),
                 ]);
             }
         }
     }
 
-    private function saveTypeFile(CompletedForm $completedForm, array $answare)
+    private function saveTypeFile(CompletedForm $completedForm, array $dataAnsware)
     {
-        $fileBase64 = $answare['answare'];
+        $fileBase64 = $dataAnsware['answare'];
 
-        $extension = explode('/', explode(':', substr($fileBase64, 0, strpos($fileBase64, ';')))[1])[1];   // .jpg .png .pdf
+        $extension = explode('/', explode(':', substr($fileBase64, 0, strpos($fileBase64, ';')))[1])[1];
 
         $replace = substr($fileBase64, 0, strpos($fileBase64, ',') + 1);
 
@@ -54,7 +54,7 @@ class CompletedFormService
         Storage::disk('public')->put($fileName, base64_decode($file));
 
         $completedForm->answers()->create([
-            'field_id' => $answare['field_id'],
+            'field_id' => $dataAnsware['field_id'],
             'answare' => json_encode($fileName),
         ]);
     }
