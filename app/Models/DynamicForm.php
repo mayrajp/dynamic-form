@@ -17,4 +17,9 @@ class DynamicForm extends Model
     {
         return $this->hasMany(Field::class);
     }
+
+    public function completedForms()
+    {
+        return $this->hasMany(CompletedForm::class);
+    }
 }

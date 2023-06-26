@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class FieldRequest extends FormRequest
+class CompletedFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,13 +26,10 @@ class FieldRequest extends FormRequest
     public function rules()
     {
         return [
-            'form_id' => 'required',
-            'label' => 'required|min:3|max:255',
-            'type' => 'required|min:3|max:255',
-            'class' => 'required|min:3|max:255',
-            'is_required' => 'required|boolean',
-            'is_multiple' => 'required|boolean',
-            'options' => 'nullable',
+            'dynamic_form_id' => 'required',
+            'user_id' => 'required',
+            'expires_in' => 'required',
+            'answers' => 'required|array',
         ];
     }
 
@@ -44,4 +41,6 @@ class FieldRequest extends FormRequest
             'data'      => $validator->errors()
         ]));
     }
+
+    
 }

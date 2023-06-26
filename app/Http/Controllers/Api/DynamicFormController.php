@@ -23,7 +23,7 @@ class DynamicFormController extends Controller
     }
 
    
-    public function getAllForms()
+    public function index()
     {
 
         $forms = DynamicForm::all();

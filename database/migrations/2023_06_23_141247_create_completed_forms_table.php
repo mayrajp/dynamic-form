@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('completed_forms', function (Blueprint $table) {
             $table->id();
-            $table->string('url_image');
+            $table->foreignId('dynamic_form_id')->constrained('dynamic_forms');
+            $table->integer('user_id');
+            $table->date('expires_in');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('completed_forms');
     }
 };
