@@ -25,12 +25,21 @@ class CompletedFormRequest extends FormRequest
      */
     public function rules()
     {
+        if($this->method() == 'PUT' || $this->method() == 'PATCH')
+        {
+            return [
+                'answers' => 'required|array',
+            ];
+        }
+        
         return [
             'dynamic_form_id' => 'required',
             'user_id' => 'required',
             'expires_in' => 'required',
             'answers' => 'required|array',
         ];
+
+        
     }
 
     public function failedValidation(Validator $validator)

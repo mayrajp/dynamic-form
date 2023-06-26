@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\DynamicForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CompletedFormResource extends JsonResource
@@ -15,9 +16,9 @@ class CompletedFormResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user_id' => 'required',
-            'expires_in' => 'required',
-            'answares' => AnswareResource::collection($this->answares),
+            'user_id' => $this->user_id,
+            'expires_in' => $this->expires_in,
+            'answers' => AnswareResource::collection($this->answers),
         ];
     }
 }

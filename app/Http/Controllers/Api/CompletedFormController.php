@@ -7,6 +7,7 @@ use App\Http\Requests\CompletedFormRequest;
 use App\Http\Resources\CompletedFormResource;
 use App\Models\CompletedForm;
 use App\Services\CompletedFormService;
+use Carbon\Carbon;
 use Exception;
 
 class CompletedFormController extends Controller
@@ -43,15 +44,38 @@ class CompletedFormController extends Controller
             return response()->json([
                 'message' => 'Answers added successfully',
             ], 200);
-
         } catch (Exception $exception) {
 
             return response()->json(['error' => $exception->getMessage()]);
         }
     }
 
-    public function update()
+    public function update(CompletedFormRequest $request, int $id)
     {
+        try {
 
+            $data = $request->validated();
+
+            $completedForm = CompletedForm::findOrFail($id);
+
+            $nowDate = Carbon::now();
+
+            $result = $nowDate->gt($completedForm->expires_in);
+
+            if ($result) {
+                return response()->json([
+                    'message' => 'The date to change this form has expired',
+                ], 403);
+            }
+
+            $this->formService->update($data);
+
+            return response()->json([
+                'message' => 'Answers added successfully',
+            ], 200);
+        } catch (Exception $exception) {
+
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
 }

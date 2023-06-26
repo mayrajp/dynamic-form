@@ -15,9 +15,9 @@ class AnswareResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'field_id' => 'required',
-            'completed_form_id' =>  'required',
-            'answer' => 'required',
+            'id' => $this->id,
+            'field_id' => $this->field_id,
+            'answer' => json_decode($this->answare),
         ];
     }
 }

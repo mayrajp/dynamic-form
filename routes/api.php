@@ -41,8 +41,5 @@ Route::controller(CompletedFormController::class)->group(function () {
     Route::get('/completed_forms/all', 'index');
     Route::get('/completed_forms/show/{id}', 'show');
     Route::post('/completed_forms/create', 'create');
-    Route::post('/completed_forms/update/{id}', 'update');
-
-    // Route::put('/completed_forms/update/{id}', 'update');
-    // Route::delete('/completed_forms/delete/{id}', 'destroy');
+    Route::put('/completed_forms/update/{id}', 'update');   
 });

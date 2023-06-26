@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Answare;
 use App\Models\CompletedForm;
 use App\Models\DynamicForm;
 use App\Models\Field;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CompletedFormService
 {
-    public function create(array $data)
+    public function create(array $data) : void
     {
         $dynamicForm = DynamicForm::findOrFail($data['dynamic_form_id']);
 
@@ -28,16 +29,66 @@ class CompletedFormService
 
             if ($field->type == 'file') {
                 $this->saveTypeFile($completedForm, $dataAnsware);
-            } else {
-                $completedForm->answers()->create([
-                    'field_id' => $dataAnsware['field_id'],
-                    'answare' => json_encode($dataAnsware['answare']),
-                ]);
+
+                continue;
             }
+
+            $completedForm->answers()->create([
+                'field_id' => $dataAnsware['field_id'],
+                'answare' => json_encode($dataAnsware['answare']),
+            ]);
         }
     }
 
-    private function saveTypeFile(CompletedForm $completedForm, array $dataAnsware)
+    public function update(array $data) : void
+    {
+        foreach ($data['answers'] as $dataAnsware) {
+
+            $oldAnswer = Answare::find($dataAnsware['id']);
+
+            $field = Field::find($dataAnsware['field_id']);
+
+            if ($field->type == 'file') {
+
+                $this->updateTypeFile($oldAnswer, $dataAnsware);
+
+                continue;
+            }
+
+            $oldAnswer->answare = json_encode($dataAnsware['answare']);
+
+            $oldAnswer->save();
+        }
+    }
+
+    private function saveTypeFile(CompletedForm $completedForm, array $dataAnsware) : void
+    {
+
+        $fileName = $this->createFileIntoStorage($dataAnsware);
+
+        $completedForm->answers()->create([
+            'field_id' => $dataAnsware['field_id'],
+            'answare' => json_encode($fileName),
+        ]);
+    }
+
+    private function updateTypeFile(Answare $oldAnsware, array $newAnsware) : void
+    {
+
+        $file =  Storage::disk('public')->exists(json_decode($oldAnsware->answare));
+
+        if($file){
+            Storage::disk('public')->delete(json_decode($oldAnsware->answare));
+        }
+        
+        $nameFile = $this->createFileIntoStorage($newAnsware);
+
+        $oldAnsware->answare = json_encode($nameFile);
+
+        $oldAnsware->save();
+    }
+
+    private function createFileIntoStorage(array $dataAnsware) : string
     {
         $fileBase64 = $dataAnsware['answare'];
 
@@ -53,9 +104,6 @@ class CompletedFormService
 
         Storage::disk('public')->put($fileName, base64_decode($file));
 
-        $completedForm->answers()->create([
-            'field_id' => $dataAnsware['field_id'],
-            'answare' => json_encode($fileName),
-        ]);
+        return $fileName;
     }
 }
