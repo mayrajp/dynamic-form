@@ -34,7 +34,7 @@ Route::controller(FieldController::class)->group(function () {
     Route::get('/field/all/by/form/{id}', 'getAllByForm');
     Route::get('/field/show/{id}', 'show');
     Route::put('/field/update/{id}', 'update');
-    Route::delete('/field/deactivate/{id}', 'deactivate');
+    Route::delete('/field/delete/{id}', 'delete');
 });
 
 Route::controller(CompletedFormController::class)->group(function () {

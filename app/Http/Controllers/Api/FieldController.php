@@ -55,7 +55,7 @@ class FieldController extends Controller
         return new FieldResource($field);
     }
 
-    public function deactivate(int $id)
+    public function delete(int $id)
     {
         $field = Field::findOrFail($id);
 
