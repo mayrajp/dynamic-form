@@ -40,12 +40,12 @@ class CompletedFormService
                     'answare' => json_encode($dataAnsware['answare']),
                 ]);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
 
             $completedForm->answers()->delete();
             $completedForm->delete();
 
-            throw new HttpException(500, $e->getMessage());
+            throw new HttpException(500, $exception->getMessage());
         }
     }
 
