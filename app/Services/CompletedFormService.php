@@ -99,7 +99,7 @@ class CompletedFormService
 
     private function createFileIntoStorage(array $dataAnsware): string
     {
-        $fileBase64 = $dataAnsware['answare'];
+        $fileBase64 = $dataAnsware['answare'][0];
 
         $extension = explode('/', explode(':', substr($fileBase64, 0, strpos($fileBase64, ';')))[1])[1];
 

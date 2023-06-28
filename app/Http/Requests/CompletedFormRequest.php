@@ -27,17 +27,33 @@ class CompletedFormRequest extends FormRequest
     {
         if($this->method() == 'PUT' || $this->method() == 'PATCH')
         {
-            return [
+            $rules =  [
                 'answers' => 'required|array',
             ];
+
+            foreach($this->get('answers') as $key => $val){
+                $rules['answers.'.$key.'.id'] = 'required';
+                $rules['answers.'.$key.'.field_id'] = 'required';
+                $rules['answers.'.$key.'.answare'] = 'required|array';
+            }
+
+            return $rules;
         }
         
-        return [
+        $rules =  [
             'dynamic_form_id' => 'required',
             'user_id' => 'required',
             'expires_in' => 'required',
             'answers' => 'required|array',
         ];
+
+        foreach($this->get('answers') as $key => $val){
+            $rules['answers.'.$key.'.id'] = 'required';
+            $rules['answers.'.$key.'.field_id'] = 'required';
+            $rules['answers.'.$key.'.answare'] = 'required|array';
+        }
+
+        return $rules;
 
         
     }

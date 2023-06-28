@@ -71,7 +71,7 @@ class CompletedFormController extends Controller
             $this->formService->update($data);
 
             return response()->json([
-                'message' => 'Answers added successfully',
+                'message' => 'Answers updated successfully',
             ], 200);
         } catch (Exception $exception) {
 

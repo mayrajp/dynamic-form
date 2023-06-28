@@ -28,7 +28,6 @@ class FieldRequest extends FormRequest
         if($this->method() == 'PUT' || $this->method() == 'PATCH')
         {
             return [
-                'fields' => 'required|array',
                 'form_id' => 'required',
                 'label' => 'required|min:3|max:255',
                 'type' => 'required|min:3|max:255',
