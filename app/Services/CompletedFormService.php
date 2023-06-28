@@ -12,35 +12,44 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CompletedFormService
 {
-    public function create(array $data) : void
+    public function create(array $data): void
     {
-        $dynamicForm = DynamicForm::findOrFail($data['dynamic_form_id']);
+        try {
 
-        $time = strtotime($data['expires_in']);
+            $dynamicForm = DynamicForm::findOrFail($data['dynamic_form_id']);
 
-        $completedForm = $dynamicForm->completedForms()->create([
-            'user_id' => $data['user_id'],
-            'expires_in' => date('Y-m-d', $time),
-        ]);
+            $time = strtotime($data['expires_in']);
 
-        foreach ($data['answers'] as $dataAnsware) {
-
-            $field = Field::find($dataAnsware['field_id']);
-
-            if ($field->type == 'file') {
-                $this->saveTypeFile($completedForm, $dataAnsware);
-
-                continue;
-            }
-
-            $completedForm->answers()->create([
-                'field_id' => $dataAnsware['field_id'],
-                'answare' => json_encode($dataAnsware['answare']),
+            $completedForm = $dynamicForm->completedForms()->create([
+                'user_id' => $data['user_id'],
+                'expires_in' => date('Y-m-d', $time),
             ]);
+
+            foreach ($data['answers'] as $dataAnsware) {
+
+                $field = Field::find($dataAnsware['field_id']);
+
+                if ($field->type == 'file') {
+                    $this->saveTypeFile($completedForm, $dataAnsware);
+
+                    continue;
+                }
+
+                $completedForm->answers()->create([
+                    'field_id' => $dataAnsware['field_id'],
+                    'answare' => json_encode($dataAnsware['answare']),
+                ]);
+            }
+        } catch (Exception $e) {
+
+            $completedForm->answers()->delete();
+            $completedForm->delete();
+
+            throw new HttpException(500, $e->getMessage());
         }
     }
 
-    public function update(array $data) : void
+    public function update(array $data): void
     {
         foreach ($data['answers'] as $dataAnsware) {
 
@@ -61,7 +70,7 @@ class CompletedFormService
         }
     }
 
-    private function saveTypeFile(CompletedForm $completedForm, array $dataAnsware) : void
+    private function saveTypeFile(CompletedForm $completedForm, array $dataAnsware): void
     {
 
         $fileName = $this->createFileIntoStorage($dataAnsware);
@@ -72,15 +81,15 @@ class CompletedFormService
         ]);
     }
 
-    private function updateTypeFile(Answare $oldAnsware, array $newAnsware) : void
+    private function updateTypeFile(Answare $oldAnsware, array $newAnsware): void
     {
 
         $file =  Storage::disk('public')->exists(json_decode($oldAnsware->answare));
 
-        if($file){
+        if ($file) {
             Storage::disk('public')->delete(json_decode($oldAnsware->answare));
         }
-        
+
         $nameFile = $this->createFileIntoStorage($newAnsware);
 
         $oldAnsware->answare = json_encode($nameFile);
@@ -88,7 +97,7 @@ class CompletedFormService
         $oldAnsware->save();
     }
 
-    private function createFileIntoStorage(array $dataAnsware) : string
+    private function createFileIntoStorage(array $dataAnsware): string
     {
         $fileBase64 = $dataAnsware['answare'];
 
