@@ -16,6 +16,7 @@ class CompletedFormResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'user_id' => $this->user_id,
             'expires_in' => $this->expires_in,
             'answers' => AnswareResource::collection($this->answers),

@@ -21,7 +21,7 @@ class CompletedFormController extends Controller
 
     public function index()
     {
-        $forms = CompletedForm::all();
+        $forms = CompletedForm::with('answers')->get();
 
         return CompletedFormResource::collection($forms);
     }

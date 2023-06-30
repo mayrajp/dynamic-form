@@ -26,7 +26,7 @@ class DynamicFormController extends Controller
     public function index()
     {
 
-        $forms = DynamicForm::all();
+        $forms = DynamicForm::with('fields')->get();
 
         return DynamicFormResource::collection($forms);
     }
